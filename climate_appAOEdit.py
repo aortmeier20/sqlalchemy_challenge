@@ -58,37 +58,37 @@ def welcome():
 
 @app.route("/api/v1.0/precipitation")
 def precipitatin():
-        session = session(engine)
+    session = session(engine)
 
-        precip_analysis = session.query(measurement.date, measurement.prcp).filter(measurement.date > '2016-02-23').all()
+    precip_analysis = session.query(measurement.date, measurement.prcp).filter(measurement.date > '2016-02-23').all()
 
-        session.close()
+    session.close()
 
-        precip_data = []
+    precip_data = []
 
-        for date, prcp in precip_analysis:
-              precip_dict = {}
-              precip_dict["date"] = date
-              precip_dict["prcp"] = prcp
-              precip_data.append(precip_dict)
-        return jsonify(precip_data)
+    for date, prcp in precip_analysis:
+        precip_dict = {}
+        precip_dict["date"] = date
+        precip_dict["prcp"] = prcp
+        precip_data.append(precip_dict)
+    return jsonify(precip_data)
 
 ##3. Return a JSON list of stations from the dataset.
 
 @app.route("/api/v1.0/stations")
 def stations():
-        session = session(engine)
+    session = session(engine)
 
-        station_list = session.query(measurement.station).distinct().all()
+    station_list = session.query(measurement.station).distinct().all()
       
-        session.close()
+    session.close()
 
-        station_data = []
-        for station in station_list:
-            station_dict = {}
-            station_dict["station name"] = station[0]
-            station_data.append(station_dict)
-        return jsonify(station_data)
+    station_data = []
+    for station in station_list:
+        station_dict = {}
+        station_dict["station name"] = station[0]
+        station_data.append(station_dict)
+    return jsonify(station_data)
 
   
         
