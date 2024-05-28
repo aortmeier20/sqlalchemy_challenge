@@ -52,3 +52,26 @@ def welcome():
             f"/api/v1.0/<start><br/>"
             f"/api/v1.0/<start>/<end><br/>"
             )
+
+##2. Convert the query results from your precipitation analysis (i.e. retrieve only the last 12 months of data) to a dictionary using date as the key and prcp as the value.
+##Return the JSON representation of your dictionary.
+
+@app.route("/api/v1.0/precipitation")
+def precipitatin():
+        session = session(engine)
+
+        precip_analysis = session.query(measurement.date, measurement.prcp).filter(measurement.date > '2016-02-23').all()
+
+        session.close()
+
+        precip_data = []
+
+        for date, prcp in precip_analysis:
+              precip_dict = {}
+              precip_dict["date"] = date
+              precip_dict["prcp"] = prcp
+              precip_data.append(precip_dict)
+        return jsonify(precip_data)
+
+##3. Return a JSON list of stations from the dataset.
+
