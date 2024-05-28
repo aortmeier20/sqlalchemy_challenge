@@ -90,5 +90,21 @@ def stations():
         station_data.append(station_dict)
     return jsonify(station_data)
 
-  
-        
+##4. Query the dates and temperature observations of the most-active station for the previous year of data.
+##Return a JSON list of temperature observations for the previous year.  
+
+@app.route("/api/v1.0/tobs")      
+def tobs():
+    session = session(engine)
+    
+    active_tobs = session.query(measurement.tobs).filter(measurement.station=='USC00519281').filter(measurement.date>='2016-08-23').all()
+
+    session.close()
+
+    tobs_data = []
+    for date, tobs in active_tobs:
+        tobs_dict = {}
+        tobs_dict["date"] = date
+        tobs_dict["Observed Temperature"] = tobs
+        tobs_data.append(tobs_dict)
+    return jsonify(tobs_data)
