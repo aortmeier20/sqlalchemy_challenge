@@ -130,3 +130,22 @@ def temps_start(start):
         temps.append(temps_dict)
     return jsonify(temps)
 
+@app.route("/api/v1.0/<start_date>/<end>")
+def temps_start_end(start, end):
+    session = session(engine)
+
+    results = session.query(func.min(measurement.tobs),func.max(measurement.tobs),func.avg(measurement.tobs)).filter(measurement.date >= start).filter(measurement.date <=end).all()
+
+    session.close()
+
+    temp = []
+    for min_temp, avg_temp, max_temp in results:
+        temps_dict = {}
+        temps_dict['Minimum Temperature'] = min_temp
+        temps_dict['Average Temperature'] = avg_temp
+        temps_dict['Maximum Temperature'] = max_temp
+        temps.append(temps_dict)
+    return jsonify(temps)
+
+if __name__ == '__main__':
+    app.run(debug=True)
